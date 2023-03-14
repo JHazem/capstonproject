@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<!-- Head -->
+<div th:replace="admin_templates/header/head"></div>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css"/>
+<body class="sidebar-collapse">
+<div class="wrapper" th:with="messageClass = ${param.class}">
+
+    <!-- Preloader -->
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <img class="animation__shake" th:src="@{/admin_resources/images/admin.png}" alt="AdminLTELogo" height="60" width="60">
+    </div>
+
+    <div id="toastsContainerTopRight" class="toasts-top-right fixed" th:with="message = ${param.message}">
+        <div th:class="|${messageClass} toast fade|" th:classappend="${message != null ? 'show ' : ''}" role="alert"
+             aria-live="assertive" aria-atomic="true">
+            <div class="toast-header" th:with="messageType = ${param.messageType}">
+                <strong class="mr-auto" th:text="${messageType}"></strong>
+                <button data-dismiss="toast" type="button" class="ml-2 mb-1 close" aria-label="Close"><span
+                        class="toast-close-btn"
+                        aria-hidden="true">×</span></button>
+            </div>
+            <div class="toast-body" th:text="${message}"></div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <div th:replace="admin_templates/nav/nav"></div>
+
+    <!-- /.navbar -->
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Add Job</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <!--    <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+                            <li class="breadcrumb-item active">Add Job</li>
+                            -->
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- jquery validation -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title"><span>Fill up</span> <small>below form</small></h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form  th:object="${addJobDto}" th:action="@{/job/addOrUpdate}" method="post">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <input type="hidden" th:field="*{jobId}">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="title">Title</label><span class="error">*</span>
+                                                <input type="text" th:field="*{title}" id="title" class="form-control"
+                                                        placeholder="Enter Title" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Company<span class="error">*</span></label><span class="error">*</span>
+                                                <input type="text" th:field="*{companyName}" id="Company" class="form-control"
+                                                       placeholder="Enter Company Name" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="skills">Skills</label><span class="error">*</span>
+                                                <select required th:field="*{skillIds}" id="skills" title="Select Skills" class="select2bs4" multiple="multiple" data-placeholder="Select Skills" style="width: 100%;">
+                                                    <option th:each="skill : ${skills}" th:text="${skill.skillsName}" th:value="${skill.id}"></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="jobType">Job Type</label><span class="error">*</span>
+                                                <input id="jobType" type="text" th:field="*{jobType}" class="form-control"
+                                                       placeholder="Enter Job Type" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="location">Location</label><span class="error">*</span>
+                                                <input id="location" type="text" th:field="*{location}" class="form-control"
+                                                       placeholder="Enter Location" required>
+                                            </div>
+
+
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!--/.col (left) -->
+                    <!-- right column -->
+                    <div class="col-md-6">
+
+                    </div>
+                    <!--/.col (right) -->
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+    <!-- Main content -->
+
+
+    <div th:replace="admin_templates/footer/footer"></div>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+
+<!-- Scripts -->
+<div th:replace="admin_templates/footer/scripts"></div>
+
+<script th:src="@{/admin_resources/js/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/admin_resources/js/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/admin_resources/js/plugins/select2/js/select2.js}"></script>
+<script th:src="@{/admin_resources/js/plugins/dropify/dropify.min.js}"></script>
+<script type="text/javascript">
+    $(function () {
+        // close toast after click on close button
+        $('.toast-close-btn').click(function () {
+            $('#toastsContainerTopRight').hide();
+        });
+
+        //Initialize Select2 Elements
+        $('.select2').select2();
+
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        });
+
+        // Basic
+        $('.dropify').dropify();
+
+    })
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<!-- Head -->
+<div th:replace="admin_templates/header/head"></div>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css"/>
+<body class="sidebar-collapse">
+<div class="wrapper" th:with="messageClass = ${param.class}">
+
+    <!-- Preloader -->
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <img class="animation__shake" th:src="@{/admin_resources/images/admin.png}" alt="AdminLTELogo" height="60" width="60">
+    </div>
+    <!-- Navbar -->
+    <div th:replace="admin_templates/nav/nav"></div>
+    <div id="toastsContainerTopRight" class="toasts-top-right fixed" th:with="message = ${param.message}">
+        <div th:class="|${messageClass} toast fade|" th:classappend="${message != null ? 'show ' : ''}" role="alert"
+             aria-live="assertive" aria-atomic="true">
+            <div class="toast-header" th:with="messageType = ${param.messageType}">
+                <strong class="mr-auto" th:text="${messageType}"></strong>
+                <button data-dismiss="toast" type="button" class="ml-2 mb-1 close" aria-label="Close"><span
+                        class="toast-close-btn"
+                        aria-hidden="true">×</span></button>
+            </div>
+            <div class="toast-body" th:text="${message}"></div>
+        </div>
+    </div>
+
+    <!-- /.navbar -->
+
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Profile</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+<!--                            <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>-->
+<!--                            <li class="breadcrumb-item active">User Profile</li>-->
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <!-- Profile Image -->
+                        <div class="card card-primary card-outline">
+                            <div class="card-body box-profile">
+                                <div class="text-center">
+                                    <img class="profile-user-img img-fluid img-circle"
+                                         th:src="@{/admin_resources/images/user_placeholder.png}"
+                                         alt="User profile picture">
+                                </div>
+
+                                <h3 class="profile-username text-center">
+                                    <span th:text="${userModel.firstName}"></span> <span th:text="${userModel.lastName}"></span>
+                                </h3>
+
+                                <p class="text-muted text-center" th:text="${userModel.email}"></p>
+                                <p class="text-muted text-center" th:text="${userModel.phoneNumber}"></p>
+<!--                                <ul class="list-group list-group-unbordered mb-3">-->
+<!--                                    <li class="list-group-item">-->
+<!--                                        <b>Role</b> <a class="float-right" th:text="${userModel.role}"></a>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+
+                    </div>
+                    <!-- /.col -->
+
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- Main content -->
+
+
+    <div th:replace="admin_templates/footer/footer"></div>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+
+<!-- Scripts -->
+<div th:replace="admin_templates/footer/scripts"></div>
+
+<script th:src="@{/admin_resources/js/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/admin_resources/js/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/admin_resources/js/plugins/select2/js/select2.js}"></script>
+<script th:src="@{/admin_resources/js/plugins/dropify/dropify.min.js}"></script>
+<script type="text/javascript">
+    $(function () {
+        // close toast after click on close button
+        $('.toast-close-btn').click(function () {
+            $('#toastsContainerTopRight').hide();
+        });
+
+        //Initialize Select2 Elements
+        $('.select2').select2();
+
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        });
+
+        // Basic
+        $('.dropify').dropify();
+
+    })
+</script>
+
+
+</body>
+</html>

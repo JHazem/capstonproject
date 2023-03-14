@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:dir="${#locale.getLanguage() == 'en' ? 'ltr' : 'rtl'}">
+<!-- Head -->
+<div th:replace="admin_templates/header/head"></div>
+<link rel="stylesheet" type="text/css" th:href="@{/admin_resources/css/plugins/datatable/datatables.min.css}"/>
+<body class=" sidebar-collapse">
+<div class="wrapper" th:with="messageClass = ${param.class}">
+
+    <!-- Preloader -->
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <img class="animation__shake" th:src="@{/admin_resources/images/admin.png}" alt="AdminLTELogo" height="60" width="60">
+    </div>
+
+    <div id="toastsContainerTopRight" class="toasts-top-right fixed" th:with="message = ${param.message}">
+        <div th:class="|${messageClass} toast fade|" th:classappend="${message != null ? 'show ' : ''}" role="alert"
+             aria-live="assertive" aria-atomic="true">
+            <div class="toast-header" th:with="messageType = ${param.messageType}">
+                <strong class="mr-auto" th:text="${messageType}"></strong>
+                <button data-dismiss="toast" type="button" class="ml-2 mb-1 close" aria-label="Close"><span
+                        class="toast-close-btn"
+                        aria-hidden="true">×</span></button>
+            </div>
+            <div class="toast-body" th:text="${message}"></div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <div th:replace="admin_templates/nav/nav"></div>
+
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+<!--    <div th:replace="admin_templates/sidebar/sidebar"></div>-->
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Job List</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <!--    <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+                            <li class="breadcrumb-item active">Job List</li>
+                            -->
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <a th:href="@{/job/add}" class="btn btn-success">
+                                    Add Job
+                                </a>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="post_cat_id" class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 10px">#</th>
+                                        <th>Company</th>
+                                        <th>Title</th>
+                                        <th>Job Type</th>
+                                        <th>Location</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!--<tr class="text-center">
+                                        <td th:if="${#lists.isEmpty(postList)}" colspan="5">No data found</td>
+                                    </tr>-->
+                                    <tr th:each="job : ${jobList}">
+                                        <td th:text="${jobStat.index+1}"></td>
+                                        <td th:text="${job.companyName}"></td>
+                                        <td th:text="${job.title}"></td>
+                                        <td th:text="${job.jobType}">
+                                        <td th:text="${job.location}">
+
+                                        </td>
+                                        <td>
+                                            <a th:href="|@{/job/update?jobId=}${job.jobId}|" class="btn btn-xs btn-warning toastrDefaultInfo"
+                                               title="Edit ">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a class="btn btn-xs btn-danger" th:href="|@{/jop/delete?jobId=}${job.jobId}|" title="Remove Company">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- Main content -->
+
+
+    <div th:replace="admin_templates/footer/footer"></div>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+
+<!-- Scripts -->
+<div th:replace="admin_templates/footer/scripts"></div>
+
+<script th:src="@{/admin_resources/js/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/admin_resources/js/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+<script type="text/javascript">
+
+
+    (function ($) {
+        $.fn.MessageBox = function (msg) {
+            return this.each(function () {
+                $(document).Toasts('create', {
+                    class: 'bg-success',
+                    title: 'Toast Title',
+                    subtitle: 'Subtitle',
+                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+                })
+            })
+        };
+    })(jQuery);
+
+    $(document).ready(function () {
+        // data table
+        $('#post_cat_id').DataTable({
+            "paging": true,
+        });
+
+        // close toast after click on close button
+        $('.toast-close-btn').click(function () {
+            $('#toastsContainerTopRight').hide();
+        });
+
+
+        /*$('.toastrDefaultInfo').click(function () {
+            toastr.info('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+        });*/
+
+
+    });
+</script>
+
+</body>
+</html>

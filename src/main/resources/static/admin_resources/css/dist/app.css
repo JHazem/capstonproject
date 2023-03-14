@@ -1,0 +1,21 @@
+/*css file for admin*/
+.error {
+    color: orangered;
+}
+
+@font-face {
+    font-family: NotoNaskhArabic;
+    src: url('/fonts/NotoNaskhArabic-VariableFont_wght.ttf') format('truetype');
+}
+
+body {
+    font-family: NotoNaskhArabic, sans-serif;
+}
+
+.float-sm-left {
+    float: left !important;
+}
+
+table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, table.dataTable tfoot td {
+    text-align: right !important;
+}

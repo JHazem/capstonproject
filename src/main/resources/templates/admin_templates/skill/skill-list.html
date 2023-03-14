@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:dir="${#locale.getLanguage() == 'en' ? 'ltr' : 'rtl'}">
+<!-- Head -->
+<div th:replace="admin_templates/header/head"></div>
+<link rel="stylesheet" type="text/css" th:href="@{/admin_resources/css/plugins/datatable/datatables.min.css}"/>
+<body class="sidebar-collapse">
+<div class="wrapper" th:with="messageClass = ${param.class}">
+
+    <!-- Preloader -->
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <img class="animation__shake" th:src="@{/admin_resources/images/admin.png}" alt="AdminLTELogo" height="60" width="60">
+    </div>
+
+    <div id="toastsContainerTopRight" class="toasts-top-right fixed" th:with="message = ${param.message}">
+        <div th:class="|${messageClass} toast fade|" th:classappend="${message != null ? 'show ' : ''}" role="alert"
+             aria-live="assertive" aria-atomic="true">
+            <div class="toast-header" th:with="messageType = ${param.messageType}">
+                <strong class="mr-auto" th:text="${messageType}"></strong>
+                <button data-dismiss="toast" type="button" class="ml-2 mb-1 close" aria-label="Close"><span
+                        class="toast-close-btn"
+                        aria-hidden="true">×</span></button>
+            </div>
+            <div class="toast-body" th:text="${message}"></div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <div th:replace="admin_templates/nav/nav"></div>
+
+    <!-- /.navbar -->
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Skill List</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                        <!--
+                            <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+                            <li class="breadcrumb-item active">Skill List</li>
+                            -->
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <a href="#" data-toggle="modal" data-target="#modal-lg-1" class="btn btn-success" >
+                                    Add Skill
+                                </a>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="post_cat_id" class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 10px">#</th>
+                                        <th>Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!--<tr class="text-center">
+                                        <td th:if="${#lists.isEmpty(postList)}" colspan="5">No data found</td>
+                                    </tr>-->
+                                    <tr th:each="skill : ${skillList}">
+                                        <td th:text="${skillStat.index+1}"></td>
+                                        <td th:id="${'skillName'+ skill.id}" th:text="${skill.skillsName}"></td>
+                                        <td>
+                                            <button type="button" th:id="${skill.id}" class="edit-skill btn btn-xs btn-warning toastrDefaultInfo"
+                                                    title="Edit ">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                            <a class="btn btn-xs btn-danger" th:href="|@{/skill/delete?skillId=}${skill.id}|" title="Remove Company">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- Main content -->
+
+
+    <div th:replace="admin_templates/footer/footer"></div>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+
+<div class="modal fade" id="modal-lg-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Skill</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form th:object="${skill}" th:action="@{/skill/add}"
+                  method="post">
+                <div class="modal-body">
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="name1" >Name</label><span class="error">*</span>
+                            <input id="name1" type="text" th:field="*{skillsName}" class="form-control"
+                                   placeholder="Name" required>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" id="modal-lg-skill-edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Update Skill</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="edit_post_category_form" th:object="${skill}" th:action="@{/skill/update}"
+                  method="post">
+                <div class="modal-body">
+
+                    <input type="hidden" id="skill_id" th:field="*{id}">
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="skillName">Name</label><span class="error">*</span>
+                            <input type="text" id='skillName'  th:field="*{skillsName}" class="form-control"
+                                   placeholder="Name">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+
+<!-- Scripts -->
+<div th:replace="admin_templates/footer/scripts"></div>
+
+<script th:src="@{/admin_resources/js/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/admin_resources/js/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+<script type="text/javascript">
+
+
+    (function ($) {
+        $.fn.MessageBox = function (msg) {
+            return this.each(function () {
+                $(document).Toasts('create', {
+                    class: 'bg-success',
+                    title: 'Toast Title',
+                    subtitle: 'Subtitle',
+                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+                })
+            })
+        };
+    })(jQuery);
+
+    $(document).ready(function () {
+        // data table
+        $('#post_cat_id').DataTable({
+            "paging": true,
+        });
+
+        // close toast after click on close button
+        $('.toast-close-btn').click(function () {
+            $('#toastsContainerTopRight').hide();
+        });
+
+
+        $(document).on('click', '.edit-skill', function () {
+            let skillId = $(this).attr('id');
+            let title = $('#skillName'+skillId).text();
+
+            console.log(skillId);
+            console.log(title);
+
+            $('#skillName').val(title);
+            $('#skill_id').val(skillId);
+
+            $('#modal-lg-skill-edit').modal('show');
+
+        })
+
+
+        /*$('.toastrDefaultInfo').click(function () {
+            toastr.info('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+        });*/
+
+
+    });
+</script>
+
+</body>
+</html>
